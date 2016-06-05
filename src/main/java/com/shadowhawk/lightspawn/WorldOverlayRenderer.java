@@ -3,6 +3,7 @@ package com.shadowhawk.lightspawn;
 import net.minecraft.util.math.MathHelper;
 //import com.shadowhawk.lightspawn.KeyManager.IKeyStateTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
@@ -20,35 +21,30 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class WorldOverlayRenderer //implements IKeyStateTracker
 {
-    public static int mobOverlay = 0;
-    public static int chunkOverlay = 0;
+    public static boolean mobOverlay = false;
 
     public static void reset() {
-        mobOverlay = 0;
-        chunkOverlay = 0;
+        mobOverlay = false;
     }
 
     public void keyPress() {
         if (Minecraft.getMinecraft().currentScreen != null)
             return;
-        mobOverlay = (mobOverlay + 1) % 2;
-        chunkOverlay = (chunkOverlay + 1) % 3;
+        mobOverlay = !mobOverlay;
     }
 
-    public void render(/*float frame*/) {
+    public void render(Minecraft minecraft, float partialTicks) {
 
-		float frame = Minecraft.getMinecraft().getRenderPartialTicks();
-    	GlStateManager.pushMatrix();
-        Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-        translateToWorldCoords(entity, frame);
+		GlStateManager.pushMatrix();
+        EntityPlayerSP player = minecraft.thePlayer;
+        translateToWorldCoords(player, partialTicks);
 
-        renderChunkBounds(entity);
-        renderMobSpawnOverlay(entity);
+        renderMobSpawnOverlay(player);
         GlStateManager.popMatrix();
     }
 
     private static void renderMobSpawnOverlay(Entity entity) {
-        if (mobOverlay == 0)
+        if (!mobOverlay)
             return;
 
         GlStateManager.disableTexture2D();
@@ -110,102 +106,6 @@ public class WorldOverlayRenderer //implements IKeyStateTracker
         if (chunk.getLightFor(EnumSkyBlock.SKY, pos) >= 8)
             return 1;
         return 2;
-    }
-
-    private static void renderChunkBounds(Entity entity) {
-        if (chunkOverlay == 0)
-            return;
-
-
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableLighting();
-        glLineWidth(1.5F);
-        glBegin(GL_LINES);
-
-        for (int cx = -4; cx <= 4; cx++)
-            for (int cz = -4; cz <= 4; cz++) {
-                double x1 = (entity.chunkCoordX + cx) << 4;
-                double z1 = (entity.chunkCoordZ + cz) << 4;
-                double x2 = x1 + 16;
-                double z2 = z1 + 16;
-
-                double dy = 128;
-                double y1 = Math.floor(entity.posY - dy / 2);
-                double y2 = y1 + dy;
-                if (y1 < 0) {
-                    y1 = 0;
-                    y2 = dy;
-                }
-
-                if (y1 > entity.worldObj.getHeight()) {
-                    y2 = entity.worldObj.getHeight();
-                    y1 = y2 - dy;
-                }
-
-                double dist = Math.pow(1.5, -(cx * cx + cz * cz));
-
-                GlStateManager.color(0.9F, 0, 0, (float) dist);
-                if (cx >= 0 && cz >= 0) {
-                    glVertex3d(x2, y1, z2);
-                    glVertex3d(x2, y2, z2);
-                }
-                if (cx >= 0 && cz <= 0) {
-                    glVertex3d(x2, y1, z1);
-                    glVertex3d(x2, y2, z1);
-                }
-                if (cx <= 0 && cz >= 0) {
-                    glVertex3d(x1, y1, z2);
-                    glVertex3d(x1, y2, z2);
-                }
-                if (cx <= 0 && cz <= 0) {
-                    glVertex3d(x1, y1, z1);
-                    glVertex3d(x1, y2, z1);
-                }
-
-                if (chunkOverlay == 2 && cx == 0 && cz == 0) {
-                    dy = 32;
-                    y1 = Math.floor(entity.posY - dy / 2);
-                    y2 = y1 + dy;
-                    if (y1 < 0) {
-                        y1 = 0;
-                        y2 = dy;
-                    }
-
-                    if (y1 > entity.worldObj.getHeight()) {
-                        y2 = entity.worldObj.getHeight();
-                        y1 = y2 - dy;
-                    }
-
-                    GlStateManager.color(0, 0.9F, 0, 0.4F);
-                    for (double y = (int) y1; y <= y2; y++) {
-                        glVertex3d(x2, y, z1);
-                        glVertex3d(x2, y, z2);
-                        glVertex3d(x1, y, z1);
-                        glVertex3d(x1, y, z2);
-                        glVertex3d(x1, y, z2);
-                        glVertex3d(x2, y, z2);
-                        glVertex3d(x1, y, z1);
-                        glVertex3d(x2, y, z1);
-                    }
-                    for (double h = 1; h <= 15; h++) {
-                        glVertex3d(x1 + h, y1, z1);
-                        glVertex3d(x1 + h, y2, z1);
-                        glVertex3d(x1 + h, y1, z2);
-                        glVertex3d(x1 + h, y2, z2);
-                        glVertex3d(x1, y1, z1 + h);
-                        glVertex3d(x1, y2, z1 + h);
-                        glVertex3d(x2, y1, z1 + h);
-                        glVertex3d(x2, y2, z1 + h);
-                    }
-                }
-            }
-
-        glEnd();
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
     }
     
     public static void translateToWorldCoords(Entity entity, float frame)

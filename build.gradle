@@ -25,7 +25,7 @@ apply plugin: 'net.minecraftforge.gradle.liteloader'
 
 version = "1.0.0"
 group = "com.shadowhawk" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "lightspawn"
+archivesBaseName = "lightspawnCBBase"
 
 minecraft {
     version = "1.9.4"
@@ -35,7 +35,7 @@ minecraft {
 
 litemod {
     json {
-        name = "lightspawn"
+        name = "lightspawnCBBase"
         mcversion = "1.9.4"
         author = "Shadow_Hawk"
     }
