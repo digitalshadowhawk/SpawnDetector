@@ -17,7 +17,6 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
     }
 }
 
@@ -25,7 +24,7 @@ apply plugin: 'net.minecraftforge.gradle.liteloader'
 
 version = "1.0.0"
 group = "com.shadowhawk" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "lightspawnCBBase"
+archivesBaseName = "SpawnDetector"
 
 minecraft {
     version = "1.9.4"
@@ -35,7 +34,7 @@ minecraft {
 
 litemod {
     json {
-        name = "lightspawnCBBase"
+        name = "spawndetctor"
         mcversion = "1.9.4"
         author = "Shadow_Hawk"
     }

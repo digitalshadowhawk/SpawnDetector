@@ -1,7 +1,6 @@
-package com.shadowhawk.lightspawn;
+package com.shadowhawk.spawndetector;
 
 import net.minecraft.util.math.MathHelper;
-//import com.shadowhawk.lightspawn.KeyManager.IKeyStateTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,17 +18,13 @@ import net.minecraft.world.chunk.Chunk;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class WorldOverlayRenderer //implements IKeyStateTracker
+import com.mumfrey.liteloader.modconfig.Exposable;
+
+public class SpawnDetectorRenderer implements Exposable
 {
     public static boolean mobOverlay = false;
 
-    public static void reset() {
-        mobOverlay = false;
-    }
-
-    public void keyPress() {
-        if (Minecraft.getMinecraft().currentScreen != null)
-            return;
+    public void toggleSpawnDetector() {
         mobOverlay = !mobOverlay;
     }
 

@@ -1,14 +1,14 @@
-package com.shadowhawk.lightspawn;
+package com.shadowhawk.spawndetector;
 
 
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigPanelHost;
 
-public class ConfigLightSpawn implements ConfigPanel{
+public class ConfigSpawnDetector implements ConfigPanel{
 
 	@Override
 	public String getPanelTitle() {
-		return "LightSpawn Config";
+		return "Spawn Detector Config";
 	}
 
 	@Override
