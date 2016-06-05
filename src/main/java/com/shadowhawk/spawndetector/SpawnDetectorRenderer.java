@@ -1,6 +1,13 @@
 package com.shadowhawk.spawndetector;
 
-import net.minecraft.util.math.MathHelper;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLineWidth;
+import static org.lwjgl.opengl.GL11.glVertex3d;
+
+import com.mumfrey.liteloader.modconfig.Exposable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,32 +17,39 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-
-import static org.lwjgl.opengl.GL11.*;
-
-import com.mumfrey.liteloader.modconfig.Exposable;
 
 public class SpawnDetectorRenderer implements Exposable
 {
     public static boolean mobOverlay = false;
 
-    public void toggleSpawnDetector() {
-        mobOverlay = !mobOverlay;
+    private static Entity dummyEntity = new EntityPig(null);
+
+    public static AxisAlignedBB aabb(double minx, double miny, double minz, double maxx, double maxy, double maxz) {
+        return new AxisAlignedBB(minx, miny, minz, maxx, maxy, maxz);
     }
 
-    public void render(Minecraft minecraft, float partialTicks) {
+    private static int getSpawnMode(Chunk chunk, int x, int y, int z) {
+        World world = chunk.getWorld();
+        BlockPos pos = new BlockPos(x, y, z);
+        if (!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(SpawnPlacementType.ON_GROUND, world, pos) ||
+                chunk.getLightFor(EnumSkyBlock.BLOCK, pos) >= 8)
+            return 0;
 
-		GlStateManager.pushMatrix();
-        EntityPlayerSP player = minecraft.thePlayer;
-        translateToWorldCoords(player, partialTicks);
+        AxisAlignedBB aabb = aabb(x+0.2, y+0.01, z+0.2, x+0.8, y+1.8, z+0.8);
+        if (!world.checkNoEntityCollision(aabb) ||
+                !world.getCollisionBoxes(dummyEntity, aabb).isEmpty() ||
+                world.containsAnyLiquid(aabb))
+            return 0;
 
-        renderMobSpawnOverlay(player);
-        GlStateManager.popMatrix();
+        if (chunk.getLightFor(EnumSkyBlock.SKY, pos) >= 8)
+            return 1;
+        return 2;
     }
 
     private static void renderMobSpawnOverlay(Entity entity) {
@@ -83,26 +97,6 @@ public class SpawnDetectorRenderer implements Exposable
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
     }
-
-    private static Entity dummyEntity = new EntityPig(null);
-    private static int getSpawnMode(Chunk chunk, int x, int y, int z) {
-        World world = chunk.getWorld();
-        BlockPos pos = new BlockPos(x, y, z);
-        if (!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(SpawnPlacementType.ON_GROUND, world, pos) ||
-                chunk.getLightFor(EnumSkyBlock.BLOCK, pos) >= 8)
-            return 0;
-
-        AxisAlignedBB aabb = aabb(x+0.2, y+0.01, z+0.2, x+0.8, y+1.8, z+0.8);
-        if (!world.checkNoEntityCollision(aabb) ||
-                !world.getCollisionBoxes(dummyEntity, aabb).isEmpty() ||
-                world.containsAnyLiquid(aabb))
-            return 0;
-
-        if (chunk.getLightFor(EnumSkyBlock.SKY, pos) >= 8)
-            return 1;
-        return 2;
-    }
-    
     public static void translateToWorldCoords(Entity entity, float frame)
     {
     	double interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
@@ -112,7 +106,17 @@ public class SpawnDetectorRenderer implements Exposable
     	GlStateManager.translate(-interpPosX, -interpPosY, -interpPosZ);
     }
     
-    public static AxisAlignedBB aabb(double minx, double miny, double minz, double maxx, double maxy, double maxz) {
-        return new AxisAlignedBB(minx, miny, minz, maxx, maxy, maxz);
+    public void render(Minecraft minecraft, float partialTicks) {
+
+		GlStateManager.pushMatrix();
+        EntityPlayerSP player = minecraft.thePlayer;
+        translateToWorldCoords(player, partialTicks);
+
+        renderMobSpawnOverlay(player);
+        GlStateManager.popMatrix();
+    }
+    
+    public void toggleSpawnDetector() {
+        mobOverlay = !mobOverlay;
     }
 }
