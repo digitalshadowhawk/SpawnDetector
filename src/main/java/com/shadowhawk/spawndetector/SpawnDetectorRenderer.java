@@ -21,12 +21,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
-<<<<<<< HEAD
-//import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeGenBase;
-=======
-import net.minecraft.world.biome.Biome;
->>>>>>> 789c6a5bd35648f856f872d85280bd5ed71d81c7
 import net.minecraft.world.chunk.Chunk;
 
 public class SpawnDetectorRenderer implements Exposable
@@ -77,11 +72,7 @@ public class SpawnDetectorRenderer implements Exposable
             for (int z = z1 - 16; z <= z1 + 16; z++) {
                 BlockPos pos = new BlockPos(x, y1, z);
                 Chunk chunk = world.getChunkFromBlockCoords(pos);
-<<<<<<< HEAD
                 BiomeGenBase biome = world.getBiomeGenForCoords(pos);
-=======
-                Biome biome = world.getBiome(pos);
->>>>>>> 789c6a5bd35648f856f872d85280bd5ed71d81c7
                 if (biome.getSpawnableList(EnumCreatureType.MONSTER).isEmpty() || biome.getSpawningChance() <= 0)
                     continue;
 
