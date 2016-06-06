@@ -36,7 +36,11 @@ minecraft {
 litemod {
     json {
         name = "spawndetctor"
+<<<<<<< HEAD
         mcversion = "1.9"
+=======
+        mcversion = "1.9.4"
+>>>>>>> 789c6a5bd35648f856f872d85280bd5ed71d81c7
         author = "Shadow_Hawk"
     }
 }
