@@ -14,7 +14,7 @@ import net.minecraft.client.settings.KeyBinding;
 public class LiteModSpawnDetector implements PostRenderListener,Tickable {
 
 	public static final String MOD_NAME = "Spawn Detector";
-	public static final String MOD_VERSION = "1.0.0";
+	public static final String MOD_VERSION = "Beta R02";
     public static LiteModSpawnDetector instance;
 	public static KeyBinding toggleSpawnDetector;
 	public SpawnDetectorRenderer renderer = new SpawnDetectorRenderer();

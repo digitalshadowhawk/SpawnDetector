@@ -22,7 +22,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.liteloader'
 
-version = "beta-R01"
+version = "beta R02"
 group = "com.shadowhawk" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SpawnDetector"
 
@@ -35,7 +35,7 @@ minecraft {
 
 litemod {
     json {
-        name = "spawndetctor"
+        name = "spawndetector"
         mcversion = "1.9.4"
         author = "Shadow_Hawk"
     }
