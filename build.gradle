@@ -22,7 +22,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.liteloader'
 
-version = "beta R02"
+version = "1.0.0"
 group = "com.shadowhawk" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SpawnDetector"
 

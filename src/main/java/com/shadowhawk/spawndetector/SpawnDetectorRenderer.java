@@ -1,16 +1,25 @@
 package com.shadowhawk.spawndetector;
 
+import static com.mumfrey.liteloader.gl.GL.GL_LINE_SMOOTH;
+import static com.mumfrey.liteloader.gl.GL.GL_ONE_MINUS_SRC_ALPHA;
+import static com.mumfrey.liteloader.gl.GL.GL_SRC_ALPHA;
+import static com.mumfrey.liteloader.gl.GL.glBlendFunc;
+import static com.mumfrey.liteloader.gl.GL.glDisableBlend;
+import static com.mumfrey.liteloader.gl.GL.glEnableBlend;
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 import static org.lwjgl.opengl.GL11.glVertex3d;
 
+import org.lwjgl.opengl.GL11;
+
 import com.mumfrey.liteloader.modconfig.Exposable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EnumCreatureType;
@@ -111,8 +120,13 @@ public class SpawnDetectorRenderer implements Exposable
 		GlStateManager.pushMatrix();
         EntityPlayerSP player = minecraft.thePlayer;
         translateToWorldCoords(player, partialTicks);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		glEnableBlend();
+		GL11.glEnable(GL_LINE_SMOOTH);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         renderMobSpawnOverlay(player);
+		glDisableBlend();
         GlStateManager.popMatrix();
     }
     
