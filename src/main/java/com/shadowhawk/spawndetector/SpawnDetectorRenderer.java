@@ -72,10 +72,10 @@ public class SpawnDetectorRenderer implements Exposable
 
         GlStateManager.color(1, 0, 0);
 
-        World world = entity.worldObj;
+        World world = entity.world;
         int x1 = (int) entity.posX;
         int z1 = (int) entity.posZ;
-        int y1 = (int) MathHelper.clamp_double(entity.posY, 16, world.getHeight() - 16);
+        int y1 = (int) MathHelper.clamp(entity.posY, 16, world.getHeight() - 16);
 
         for (int x = x1 - 16; x <= x1 + 16; x++)
             for (int z = z1 - 16; z <= z1 + 16; z++) {
@@ -118,7 +118,7 @@ public class SpawnDetectorRenderer implements Exposable
     public void render(Minecraft minecraft, float partialTicks) {
 
 		GlStateManager.pushMatrix();
-        EntityPlayerSP player = minecraft.thePlayer;
+        EntityPlayerSP player = minecraft.player;
         translateToWorldCoords(player, partialTicks);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 		glEnableBlend();
