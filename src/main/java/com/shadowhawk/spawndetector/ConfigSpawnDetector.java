@@ -9,7 +9,7 @@ import com.shadowhawk.spawndetector.LiteModSpawnDetector;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiSlider;
+import net.minecraft.client.resources.I18n;
 
 public class ConfigSpawnDetector implements ConfigPanel{
 	
@@ -18,18 +18,19 @@ public class ConfigSpawnDetector implements ConfigPanel{
 	  
 	private GuiButton activeButton;
 	private GuiButton overlayMode;
-	private GuiButton disclaimer;
-	private GuiButton disclaimer2;
-	private GuiSlider overlayIntensity;
-	private GuiSlider radius;
+	private GuiButton transparency;
+	private GuiButton radius;
 	private Minecraft minecraft;
 	private LiteModSpawnDetector shell = LiteModSpawnDetector.instance;
+	private float [] transparencies = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f};
+	private int [] radii = {8, 16, 24, 32};
 	
 
 	@Override
 	public String getPanelTitle() {
 		
-		return "Pop Enchant Tags Settings";
+		return I18n.format("spawndetector.configpanel.title", new Object[] {LiteModSpawnDetector.MOD_NAME});
+		//return "Spawn Detector Settings";
 	}
 
 	@Override
@@ -42,11 +43,9 @@ public class ConfigSpawnDetector implements ConfigPanel{
 		minecraft = Minecraft.getMinecraft();
 	    int id = 0;
 	    int line = 0;
-	    overlayMode = new GuiButton(id++, 10, SPACING * line++, "Overlay Mode: " + shell.getOverlayModeString());
-	    disclaimer = new GuiButton(id++, 10, SPACING * line++, "Sliders coming soon!");
-	    disclaimer2 = new GuiButton(id++, 10, SPACING * line++, "Change values in SpawnDetector.json");
-	    overlayIntensity = new GuiSlider(null, id++, 10, SPACING * line++, "Overlay Intensity", 0.01f, 0.3f, 0.25f, null);
-	    radius = new GuiSlider(null, id++, 10, SPACING * line++, "Radius", 8, 64, 8, null);
+	    overlayMode = new GuiButton(id++, 10, SPACING * line++, I18n.format("spawndetector.configpanel.button.mode", new Object [] {}) + I18n.format("spawndetector.configpanel.mode." + shell.getOverlayMode(), new Object [] {}));
+	    transparency = new GuiButton(id++, 10, SPACING * line++, I18n.format("spawndetector.configpanel.button.intensity", new Object [] {}) + shell.getOverlayStrength());
+	    radius = new GuiButton(id++, 10, SPACING * line++, I18n.format("spawndetector.configpanel.button.radius", new Object [] {}) + shell.getRadius());
 	}
 
 	@Override
@@ -64,9 +63,7 @@ public class ConfigSpawnDetector implements ConfigPanel{
 	@Override
 	public void drawPanel(ConfigPanelHost host, int mouseX, int mouseY, float partialTicks) {
 		overlayMode.drawButton(minecraft, mouseX, mouseY);
-		disclaimer.drawButton(minecraft, mouseX, mouseY);
-		disclaimer2.drawButton(minecraft, mouseX, mouseY);
-		overlayIntensity.drawButton(minecraft, mouseX, mouseY);
+		transparency.drawButton(minecraft, mouseX, mouseY);
 		radius.drawButton(minecraft, mouseX, mouseY);
 	}
 
@@ -76,8 +73,42 @@ public class ConfigSpawnDetector implements ConfigPanel{
 		{
 			activeButton = overlayMode;
 			shell.setOverlayMode(Math.abs(shell.getOverlayMode()-1));
-			overlayMode.displayString = ("Overlay Mode: " + shell.getOverlayModeString());
+			overlayMode.displayString = I18n.format("spawndetector.configpanel.button.mode", new Object [] {}) + I18n.format("spawndetector.configpanel.mode." + shell.getOverlayMode(), new Object [] {});
 			overlayMode.playPressSound(minecraft.getSoundHandler());
+		}
+		if(transparency.mousePressed(minecraft, mouseX, mouseY))
+		{
+			activeButton = transparency;
+			int index = 0;
+			for(int i = 0; i < transparencies.length; i++)
+			{
+				if(shell.getOverlayStrength() == transparencies[i])
+				{
+					index = (i+1) % transparencies.length;
+					
+				}
+			}
+			shell.setOverlayStrength(transparencies[index]);
+			
+			transparency.displayString = I18n.format("spawndetector.configpanel.button.intensity", new Object [] {}) + shell.getOverlayStrength();
+			transparency.playPressSound(minecraft.getSoundHandler());
+		}
+		if(radius.mousePressed(minecraft, mouseX, mouseY))
+		{
+			activeButton = radius;
+			int index = 0;
+			for(int i = 0; i < radii.length; i++)
+			{
+				if(shell.getRadius() == radii[i])
+				{
+					index = (i+1) % radii.length;
+					
+				}
+			}
+			shell.setRadius(radii[index]);
+			
+			radius.displayString = I18n.format("spawndetector.configpanel.button.radius", new Object [] {}) + shell.getRadius();
+			radius.playPressSound(minecraft.getSoundHandler());
 		}
 	}
 

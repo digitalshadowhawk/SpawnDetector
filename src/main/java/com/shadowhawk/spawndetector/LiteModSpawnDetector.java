@@ -16,6 +16,7 @@ import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 
 @ExposableOptions(
@@ -31,17 +32,16 @@ public class LiteModSpawnDetector implements PostRenderListener,Tickable,Exposab
 	private int overlayMode = 0;
 	@Expose
 	@SerializedName("overlay_strength")
-	private float overlayStrength = 0.25f;
+	private float overlayStrength = 0.3f;
 	@Expose
 	@SerializedName("radius")
 	private int radius = 8;
 	
 	public static final String MOD_NAME = "Spawn Detector";
-	public static final String MOD_VERSION = "1.0.0";
+	public static final String MOD_VERSION = "1.1.0";
     public static LiteModSpawnDetector instance;
 	public static KeyBinding toggleSpawnDetector;
-	public SpawnDetectorRenderer renderer = new SpawnDetectorRenderer();
-	
+	public SpawnDetectorRenderer renderer = new SpawnDetectorRenderer();;
 	
 	public String confpath;
 	
@@ -65,8 +65,7 @@ public class LiteModSpawnDetector implements PostRenderListener,Tickable,Exposab
     @Override
 	public void init(File configPath) 
 	{
-		//LiteLoader.getInstance().registerExposable(renderer, null);
-		toggleSpawnDetector = new KeyBinding("Toggle Spawn Detector", Keyboard.KEY_L, "Spawn Detector");
+		toggleSpawnDetector = new KeyBinding(I18n.format("spawndetector.controls.toggle", new Object [] {}), Keyboard.KEY_L, "Spawn Detector");
 		LiteLoader.getInput().registerKeyBinding(toggleSpawnDetector);
 	}
     

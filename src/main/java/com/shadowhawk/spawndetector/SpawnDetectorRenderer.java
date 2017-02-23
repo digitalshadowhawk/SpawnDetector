@@ -109,11 +109,9 @@ public class SpawnDetectorRenderer
                     float alpha = LiteModSpawnDetector.instance.getOverlayStrength() + (0.75f * (1 - renderMode));
                     
                     if (spawnMode == 1)
-                        //GlStateManager.color(1, 1, 0);
-                    	GlStateManager.color(1, 1, 0, alpha);
+                        GlStateManager.color(1, 1, 0, alpha);
                     else
-                        //GlStateManager.color(1, 0, 0);
-                    	GlStateManager.color(1, 0, 0, alpha);
+                        GlStateManager.color(1, 0, 0, alpha);
 
                     
                     glVertex3d(x, y + 0.004, z);
