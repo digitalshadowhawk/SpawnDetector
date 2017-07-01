@@ -12,7 +12,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
     
 }
@@ -24,15 +24,15 @@ group = "com.shadowhawk" // http://maven.apache.org/guides/mini/guide-naming-con
 archivesBaseName = "SpawnDetector"
 
 minecraft {
-    version = "1.11.2"
-    mappings = "snapshot_20170223"
+    version = "1.12"
+    mappings = "snapshot_20170627"
     runDir = "run"
 }
 
 litemod {
     json {
         name = "spawndetector"
-        mcversion = "1.11.2"
+        mcversion = "1.12"
         author = "Shadow_Hawk"
     }
 }

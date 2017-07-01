@@ -62,9 +62,9 @@ public class ConfigSpawnDetector implements ConfigPanel{
 
 	@Override
 	public void drawPanel(ConfigPanelHost host, int mouseX, int mouseY, float partialTicks) {
-		overlayMode.drawButton(minecraft, mouseX, mouseY);
-		transparency.drawButton(minecraft, mouseX, mouseY);
-		radius.drawButton(minecraft, mouseX, mouseY);
+		overlayMode.drawButton(minecraft, mouseX, mouseY, partialTicks);
+		transparency.drawButton(minecraft, mouseX, mouseY, partialTicks);
+		radius.drawButton(minecraft, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
