@@ -65,7 +65,7 @@ public class LiteModSpawnDetector implements PostRenderListener,Tickable,Exposab
     @Override
 	public void init(File configPath) 
 	{
-		toggleSpawnDetector = new KeyBinding(I18n.format("spawndetector.controls.toggle", new Object [] {}), Keyboard.KEY_L, "Spawn Detector");
+		toggleSpawnDetector = new KeyBinding(I18n.format("spawndetector.controls.toggle"), Keyboard.KEY_L, "Spawn Detector");
 		LiteLoader.getInput().registerKeyBinding(toggleSpawnDetector);
 	}
     
@@ -108,7 +108,7 @@ public class LiteModSpawnDetector implements PostRenderListener,Tickable,Exposab
 	
 	@Override
 	public Class<? extends ConfigPanel> getConfigPanelClass() {
-		return ConfigSpawnDetector.class;
+		return SpawnDetectorConfigPanel.class;
 	}
 
 	public int getRadius() {
