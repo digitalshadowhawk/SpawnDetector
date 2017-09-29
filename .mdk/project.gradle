@@ -20,7 +20,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.liteloader'
 
 minecraft {
-    version = project.mcVersion
+    version = project.mcpVersion
     mappings = project.mappings
     runDir = 'run'
 }

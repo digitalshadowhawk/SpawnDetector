@@ -10,6 +10,7 @@ litemod {
         displayName = project.displayName
         description = project.moddescription
         author = "Shadow_Hawk"
+        mcversion=project.mcVersion
     }
 }
 
@@ -20,6 +21,6 @@ jar {
         'Built-By': System.properties['user.name'],
         'Created-By': System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
         'Implementation-Title': project.name,
-        'Implementation-Version': project.version
+        'Implementation-Version': project.mcVersion
     )
 }
